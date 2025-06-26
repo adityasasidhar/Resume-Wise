@@ -2,9 +2,6 @@
 
 ### ✨ Your wish for the perfect candidate, granted by AI. ✨
 
-
-*(Note: You should replace the image link above with a real screenshot or, even better, an animated GIF of your final application!)*
-
 ## 🚀 About The Project
 
 Resume Wish is a full-stack AI-powered application designed for modern HR professionals. It moves beyond simple keyword matching by performing a sophisticated, **comparative analysis** of a batch of resumes against a single job description. The application then produces a ranked shortlist of candidates, complete with scores, evidence-based strengths, and weaknesses, allowing for faster and more intelligent hiring decisions.
