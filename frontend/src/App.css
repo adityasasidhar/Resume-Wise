@@ -123,3 +123,65 @@ textarea:focus { outline: none; border-color: var(--accent-color); box-shadow: 0
 .loading-card { text-align: center; }
 .loader { margin: 1.5rem auto; width: 40px; height: 40px; border: 5px solid var(--glass-border); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
 .error-message { border-left: 4px solid var(--red); padding: 1.5rem; background: rgba(231, 76, 60, 0.1); }
+/* --- Add these new rules to the end of frontend/src/App.css --- */
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.results-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.download-button {
+  background-color: var(--accent-color);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  transform: translateY(0);
+}
+.download-button:hover {
+  background-color: var(--accent-color-hover);
+  border-color: var(--accent-color-hover);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+/* --- Add these new rules to the end of frontend/src/App.css --- */
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.results-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.download-button {
+  background-color: var(--accent-color);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-color);
+  padding: 0.5rem 1.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  transform: translateY(0);
+}
+.download-button:hover {
+  background-color: var(--accent-color-hover);
+  border-color: var(--accent-color-hover);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
