@@ -3,62 +3,72 @@
 
 :root {
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --background-start: #232526;
-  --background-end: #414345;
+  --background-color: #0b0f19; /* A deep, dark space blue */
   --accent-color: #6d5b97;
   --accent-color-hover: #5b4a87;
   --text-primary: #f8fafc;
   --text-secondary: #bdc3c7;
-  --glass-bg: rgba(40, 40, 40, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-bg: rgba(21, 25, 40, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.1);
   --green: #2ecc71;
   --red: #e74c3c;
   --border-radius: 14px;
   --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  /* The star images are embedded as data URIs */
+  --stars-sm: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="50" cy="50" r="1" fill="white"/></svg>');
+  --stars-md: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="20" cy="80" r="1.5" fill="white"/><circle cx="90" cy="40" r="1.5" fill="white"/></svg>');
+  --stars-lg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="10" cy="10" r="2.5" fill="white"/><circle cx="80" cy="70" r="2.5" fill="white"/></svg>');
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+/* Animations for stars and fading in content */
+@keyframes move-stars-sm { from { background-position: 0 0; } to { background-position: -10000px 5000px; } }
+@keyframes move-stars-md { from { background-position: 0 0; } to { background-position: -10000px 8000px; } }
+@keyframes move-stars-lg { from { background-position: 0 0; } to { background-position: -10000px 12000px; } }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+@keyframes spin { to { transform: rotate(360deg); } }
 
 body {
   font-family: var(--font-family);
-  background: linear-gradient(135deg, var(--background-start), var(--background-end));
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
   color: var(--text-primary);
   margin: 0;
   line-height: 1.6;
 }
 
 .app-container {
-  /* Widen the container to give columns space */
-  max-width: 1500px;
+  position: relative;
+  isolation: isolate; /* Creates a new stacking context */
+}
+
+/* Star layers are positioned behind the main content */
+.stars {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  display: block;
+  z-index: -1;
+}
+.stars-sm { animation: move-stars-sm 200s linear infinite; background: transparent var(--stars-sm) repeat top center; opacity: 0.5; }
+.stars-md { animation: move-stars-md 150s linear infinite; background: transparent var(--stars-md) repeat top center; opacity: 0.3; }
+.stars-lg { animation: move-stars-lg 100s linear infinite; background: transparent var(--stars-lg) repeat top center; opacity: 0.1; }
+
+.app-content {
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 3rem 1.5rem;
 }
 
 .app-header { text-align: center; margin-bottom: 3rem; animation: fadeIn 0.6s ease-out; }
-.app-header h1 { font-size: 2.5rem; font-weight: 700; color: #fff; }
+.app-header h1 { font-size: 2.8rem; font-weight: 700; color: #fff; }
 .app-header p { font-size: 1.2rem; color: var(--text-secondary); }
 
 .app-layout {
   display: grid;
-  /* THE NEW BALANCED, PROPORTIONAL GRID SYSTEM */
-  grid-template-columns: minmax(0, 2.5fr) 1.2fr 1.5fr;
-  /* More generous gap for a cleaner look */
-  gap: 2rem;
+  grid-template-columns: minmax(0, 2fr) 280px minmax(300px, 1fr);
+  gap: 1.5rem;
   align-items: flex-start;
 }
-/* New breakpoint for the wider layout */
-@media (max-width: 1200px) {
-  .app-layout {
-    grid-template-columns: 1fr;
-  }
-}
+@media (max-width: 1100px) { .app-layout { grid-template-columns: 1fr; } }
 
 .card, .sidebar-section {
   background: var(--glass-bg);
@@ -72,31 +82,29 @@ body {
 .card { padding: 2rem; }
 .sidebar-section { padding: 1.5rem; }
 
-/* --- Column 1: Main Content --- */
+/* -- The rest of the CSS remains the same -- */
 .form-group label { font-weight: 600; color: var(--text-secondary); }
 textarea { width: 100%; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid var(--glass-border); background-color: rgba(15, 15, 15, 0.5); color: var(--text-primary); font-family: var(--font-family); font-size: 1rem; resize: vertical; transition: all 0.2s ease; }
 textarea:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(109, 91, 151, 0.4); }
+.results-header { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; }
+.results-actions { display: flex; gap: 1rem; }
 .results-header h2 { margin: 0; }
 .results-grid { display: grid; gap: 1.5rem; }
 .result-card { background-color: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 1.5rem; display: flex; flex-direction: column; gap: 1.2rem; border-left: 4px solid var(--accent-color); }
-
-/* --- Columns 2 & 3: Sidebars --- */
 .sidebar-sticky-content { position: sticky; top: 2rem; display: flex; flex-direction: column; gap: 1.5rem; }
 .sidebar-section h4 { margin-top: 0; margin-bottom: 1.2rem; font-size: 1.1rem; font-weight: 600; color: #fff; }
 .file-input { box-sizing: border-box; width: 100%; font-size: 1rem; padding: 0.2rem; background: transparent; border-radius: 10px; border: 1px solid var(--glass-border); }
 .file-input::file-selector-button { background-color: var(--glass-border); border: none; padding: 0.6rem 1rem; border-radius: 8px; color: var(--text-primary); font-weight: 600; cursor: pointer; transition: background-color 0.2s ease; }
 .file-input::file-selector-button:hover { background-color: var(--accent-color); }
-.submit-button, .reset-button { width: 100%; padding: 0.9rem; border-radius: 10px; border: none; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; transform: translateY(0); }
+.submit-button, .reset-button, .download-button { width: 100%; padding: 0.9rem; border-radius: 10px; border: none; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; transform: translateY(0); }
 .submit-button { background-color: var(--accent-color); color: #fff; }
-.submit-button:hover { background-color: var(--accent-color-hover); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); transform: translateY(-2px); }
+.submit-button:hover, .download-button:hover { background-color: var(--accent-color-hover); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); transform: translateY(-2px); }
 .submit-button:disabled { background-color: #3a3a3a; color: #777; cursor: not-allowed; transform: none; box-shadow: none; }
 .reset-button { background-color: rgba(255, 255, 255, 0.1); color: var(--text-primary); }
 .reset-button:hover { background-color: rgba(255, 255, 255, 0.2); }
-
-/* --- Staging Area & Previews --- */
+.download-button { width: auto; padding: 0.5rem 1.2rem; background-color: var(--accent-color); color: var(--text-primary); border: 1px solid var(--accent-color); }
 .file-staging-area { padding-bottom: 0.5rem; }
-/* Taller container to better fit its larger column */
-.staged-files-container { max-height: calc(100vh - 250px); overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; margin-right: -10px; padding-right: 10px; }
+.staged-files-container { max-height: calc(100vh - 200px); overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; margin-right: -10px; padding-right: 10px; }
 .file-preview-card { display: flex; align-items: center; gap: 1rem; background: rgba(0, 0, 0, 0.2); padding: 0.75rem; border-radius: 10px; animation: fadeIn 0.4s ease-out; }
 .file-icon { flex-shrink: 0; width: 36px; height: 36px; display: grid; place-items: center; background: var(--accent-color); color: white; border-radius: 8px; font-size: 1.4rem; }
 .file-details { flex-grow: 1; overflow: hidden; }
@@ -105,8 +113,6 @@ textarea:focus { outline: none; border-color: var(--accent-color); box-shadow: 0
 .no-files-text { color: var(--text-secondary); text-align: center; font-size: 0.9rem; }
 .remove-btn { background: none; border: none; font-size: 1.6rem; color: var(--text-secondary); cursor: pointer; transition: color 0.2s; padding: 0 .5rem; }
 .remove-btn:hover { color: var(--red); }
-
-/* --- Shared Component Styles --- */
 .card-header { display: flex; justify-content: space-between; align-items: flex-start; }
 .candidate-rank { color: var(--accent-color); font-weight: 700; font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; }
 .candidate-name { font-size: 1.3rem; font-weight: 600; }
@@ -118,70 +124,6 @@ textarea:focus { outline: none; border-color: var(--accent-color); box-shadow: 0
 .points-list ul { margin: 0; padding-left: 1rem; color: var(--text-secondary); }
 .points-list ul li::marker { content: '✓ '; color: var(--green); }
 .bad-points ul li::marker { content: '✗ '; color: var(--red); }
-
-/* --- States --- */
 .loading-card { text-align: center; }
 .loader { margin: 1.5rem auto; width: 40px; height: 40px; border: 5px solid var(--glass-border); border-top-color: var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
 .error-message { border-left: 4px solid var(--red); padding: 1.5rem; background: rgba(231, 76, 60, 0.1); }
-/* --- Add these new rules to the end of frontend/src/App.css --- */
-
-.results-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.results-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.download-button {
-  background-color: var(--accent-color);
-  color: var(--text-primary);
-  border: 1px solid var(--accent-color);
-  padding: 0.5rem 1.2rem;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  transform: translateY(0);
-}
-.download-button:hover {
-  background-color: var(--accent-color-hover);
-  border-color: var(--accent-color-hover);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
-}
-/* --- Add these new rules to the end of frontend/src/App.css --- */
-
-.results-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.results-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.download-button {
-  background-color: var(--accent-color);
-  color: var(--text-primary);
-  border: 1px solid var(--accent-color);
-  padding: 0.5rem 1.2rem;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  transform: translateY(0);
-}
-.download-button:hover {
-  background-color: var(--accent-color-hover);
-  border-color: var(--accent-color-hover);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transform: translateY(-2px);
-}
