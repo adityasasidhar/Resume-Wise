@@ -19,11 +19,43 @@ The entire user interface is built to be professional and aesthetically pleasing
 
 ## 🛠️ Tech Stack
 
-*   **Frontend**: React (Vite)
-*   **Backend**: Node.js with Hono (a fast, lightweight web framework)
-*   **AI Agent**: LangChain.js with Google Gemini (`gemini-1.5-pro-latest`)
-*   **File Parsing**: LangChain's built-in document loaders for PDF and DOCX
-*   **PDF Generation**: `jspdf` & `jspdf-autotable`
+### Frontend Technologies
+*   **React** - A popular JavaScript library for building user interfaces, created by Facebook. React makes it easy to create interactive UIs that update efficiently when data changes.
+*   **Vite** - A modern, fast frontend build tool that significantly improves the development experience with features like instant server start and hot module replacement.
+*   **jsPDF & jspdf-autotable** - JavaScript libraries that enable the application to generate professional PDF reports directly in the browser, without requiring server-side processing.
+*   **CSS with Glassmorphism** - Modern styling technique that creates a frosted glass effect, giving the application a premium, contemporary look and feel.
+
+### Backend Technologies
+*   **Node.js** - A JavaScript runtime that allows developers to run JavaScript on the server side, enabling a unified JavaScript codebase across the entire application.
+*   **Hono** - A fast, lightweight web framework for Node.js that provides essential features for building APIs with minimal overhead.
+
+### AI & Machine Learning Technologies
+*   **LangChain.js** - An advanced framework designed to build applications powered by language models. It provides tools for connecting AI models with external data sources and allowing them to interact with their environment.
+*   **Google Gemini API** - Google's state-of-the-art large language model that powers the AI analysis in this application. Specifically, we use the `gemini-1.5-flash-latest` model, which offers an excellent balance of speed and accuracy.
+*   **Document Processing** - LangChain's document loaders extract and process text from PDF and DOCX resume files, making the content accessible to the AI for analysis.
+*   **Structured Output with Zod** - The application uses Zod, a TypeScript-first schema validation library, to ensure the AI generates consistent, structured responses that can be reliably processed by the application.
+
+## 🏗️ Architecture & Technical Implementation
+
+Resume Wish uses a modern, scalable architecture that combines the best of web and AI technologies:
+
+### How It Works
+
+1. **User Interface Layer** - The React frontend provides an intuitive interface where HR professionals can upload job descriptions and multiple resume files. The UI is designed with a focus on user experience, featuring a responsive layout and visual feedback during the analysis process.
+
+2. **API Layer** - The Node.js backend with Hono framework handles HTTP requests, file uploads, and coordinates the resume analysis process. This lightweight API layer ensures fast response times and efficient resource usage.
+
+3. **Document Processing Layer** - When resumes are uploaded, LangChain's document loaders extract text content from PDF and DOCX files, preparing it for analysis by the AI.
+
+4. **AI Analysis Layer** - The core of the application uses Google's Gemini API through LangChain to:
+   - Analyze the job description to identify key requirements
+   - Process each resume to extract relevant information
+   - Compare all candidates against each other using a sophisticated evaluation framework
+   - Generate a ranked list with detailed strengths and weaknesses for each candidate
+
+5. **Output Generation Layer** - The results are formatted and displayed in the UI, with the option to generate a professional PDF report using jsPDF.
+
+This architecture ensures that Resume Wish can handle multiple file formats, process large batches of resumes efficiently, and provide consistent, high-quality analysis results.
 
 ## ⚙️ Setup and Installation
 
