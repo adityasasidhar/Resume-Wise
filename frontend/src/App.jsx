@@ -2,6 +2,12 @@ import { useState } from 'react';
 import './App.css';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import Header from './components/Header';
+import JobDescriptionForm from './components/JobDescriptionForm';
+import ControlsSidebar from './components/ControlsSidebar';
+import StagingSidebar from './components/StagingSidebar';
+import ResultsDisplay from './components/ResultsDisplay';
+import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
     const [jobDescription, setJobDescription] = useState('');
@@ -93,7 +99,7 @@ function App() {
         stagedFiles.forEach(file => formData.append('resumes', file));
 
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://resume-wise-backend.onrender.com';
             const response = await fetch(`${apiUrl}/api/analyze`, { method: 'POST', body: formData });
 
             if (!response.ok) {
@@ -110,77 +116,42 @@ function App() {
 
     return (
         <div className="app-container">
-            <header className="app-header">
-                <h1>Resume Wish</h1>
-                <p>Your wish for the perfect candidate, granted by AI.</p>
-            </header>
+            <Header />
 
             {error && <div className="card error-message full-width"><p>{error}</p></div>}
 
             <div className="app-layout">
                 <main className="main-content">
                     {analysisResults.length > 0 ? (
-                        <section id="results-section">
-                            <div className="results-header">
-                                <h2>Ranked Shortlist</h2>
-                                <div className="results-actions">
-                                    <button className="reset-button" onClick={handleReset}>Start Over</button>
-                                    <button className="download-button" onClick={handleDownloadReport}>Download PDF</button>
-                                </div>
-                            </div>
-                            <div className="results-grid">{analysisResults.map((result, index) => (
-                                <div key={index} className={`result-card ${result.error ? 'error-card' : ''}`}>
-                                    <div className="card-header">
-                                        <div className="candidate-info"><span className="candidate-rank">#{result.rank || index + 1}</span><span className="candidate-name">{result.candidateName || result.fileName}</span></div>
-                                        {!result.error && <div className="score-badge">Score: {result.score}</div>}
-                                    </div>
-                                    {result.error ? <p className="error-text-small">{result.error}</p> : (
-                                        <div className="points-container">
-                                            <div className="points-list good-points"><h4>Strengths</h4><ul>{result.good_points.map((p,i)=><li key={i}>{p}</li>)}</ul></div>
-                                            <div className="points-list bad-points"><h4>Weaknesses</h4><ul>{result.bad_points.map((p,i)=><li key={i}>{p}</li>)}</ul></div>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}</div>
-                        </section>
+                        <ResultsDisplay
+                            analysisResults={analysisResults}
+                            handleReset={handleReset}
+                            handleDownloadReport={handleDownloadReport}
+                        />
                     ) : isLoading ? (
-                        <section className="card loading-card">
-                            <div className="loader"></div>
-                            <h3>Analyzing Candidates...</h3>
-                            <p>The AI is reading and comparing every resume.</p>
-                        </section>
+                        <LoadingSpinner />
                     ) : (
-                        <section className="card">
-                            <div className="form-group"><label htmlFor="job-description">Job Description</label><textarea id="job-description" value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} placeholder="Paste the full job description here..." required rows="15" /></div>
-                        </section>
+                        <JobDescriptionForm
+                            jobDescription={jobDescription}
+                            setJobDescription={setJobDescription}
+                        />
                     )}
                 </main>
 
-                <aside className="actions-sidebar">
-                    <div className="sidebar-sticky-content">
-                        <div className="sidebar-section"><h4>Controls</h4><button className="reset-button" onClick={handleReset}>Reset All</button></div>
-                        <div className="sidebar-section"><h4>Upload Resumes</h4><div className="form-group"><input type="file" id="resumes-input" className="file-input" onChange={handleFileChange} multiple accept=".pdf,.docx"/></div></div>
-                        <button className="submit-button" onClick={handleSubmit} disabled={isLoading || stagedFiles.length === 0 || !jobDescription}>{isLoading ? 'Analyzing...' : `Analyze & Rank`}</button>
-                    </div>
-                </aside>
+                <ControlsSidebar
+                    handleReset={handleReset}
+                    handleFileChange={handleFileChange}
+                    handleSubmit={handleSubmit}
+                    isLoading={isLoading}
+                    stagedFiles={stagedFiles}
+                    jobDescription={jobDescription}
+                />
 
-                <aside className="staging-sidebar">
-                    <div className="sidebar-sticky-content">
-                        <div className="sidebar-section file-staging-area">
-                            <h4>Staged Files ({stagedFiles.length})</h4>
-                            <div className="staged-files-container">{stagedFiles.length > 0 ? stagedFiles.map((file, index) => (
-                                <div key={file.name} className="file-preview-card">
-                                    <div className="file-icon">📄</div>
-                                    <div className="file-details">
-                                        <div className="file-name">{file.name}</div>
-                                        <div className="file-meta">{formatFileSize(file.size)}</div>
-                                    </div>
-                                    <button type="button" className="remove-btn" onClick={() => handleRemoveFile(index)}>×</button>
-                                </div>
-                            )) : (<p className='no-files-text'>Upload one or more resumes to begin.</p>)}</div>
-                        </div>
-                    </div>
-                </aside>
+                <StagingSidebar
+                    stagedFiles={stagedFiles}
+                    handleRemoveFile={handleRemoveFile}
+                    formatFileSize={formatFileSize}
+                />
             </div>
         </div>
     );
